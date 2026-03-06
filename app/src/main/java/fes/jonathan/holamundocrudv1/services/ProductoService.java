@@ -12,8 +12,8 @@ public class ProductoService {
 
     private ProductoService() {
         productos = new ArrayList<>();
-        productos.add(new ProductoModel(1, "Hawaiana", "La mas polular del condado"));
-        productos.add(new ProductoModel(2, "Mexicana", "Un mexicano no se puede resistir a ella"));
+        productos.add(new ProductoModel(1, "Hawaiana", "Trae Piña y Jamón"));
+        productos.add(new ProductoModel(2, "Mexicana", "Pues es de aqui , es mexicana "));
     }
 
 
