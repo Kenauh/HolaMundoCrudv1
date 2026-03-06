@@ -37,9 +37,17 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        mostrarDialog();
         spinner = findViewById(R.id.spinner);
         service = ProductoService.getInstance();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarSpinner();
+    }
+
+    private void actualizarSpinner() {
         List<ProductoModel> productoModels = service.obtenerTodos();
         llenarSpinner(productoModels);
     }
@@ -77,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void confirmarBorrar(View view){
         ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
+        if (productoModel == null) return;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eliminar")
                 .setMessage("¿Quiéres borrar este elemento? "+productoModel.getNombre());
@@ -85,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 service.borrar(productoModel.getId());
                 Toast.makeText(getBaseContext(),"Producto borrado", Toast.LENGTH_SHORT).show();
-                List<ProductoModel> productoModels = service.obtenerTodos();
-                llenarSpinner(productoModels);
+                actualizarSpinner();
             }
         });
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -107,15 +116,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irAEditar(View view){
-        Intent intent = new Intent(this, EditarActivity.class);
         ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
+        if (productoModel == null) {
+            Toast.makeText(this, "Selecciona un producto", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, EditarActivity.class);
         intent.putExtra("ProductoId", productoModel.getId());
         startActivity(intent);
     }
 
     public void irADetalles(View view){
-        Intent intent = new Intent(this, DetallesActivity.class);
         ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
+        if (productoModel == null) {
+            Toast.makeText(this, "Selecciona un producto", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, DetallesActivity.class);
         intent.putExtra("ProductoId", productoModel.getId());
         startActivity(intent);
     }
