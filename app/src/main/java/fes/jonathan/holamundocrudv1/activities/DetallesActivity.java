@@ -17,6 +17,7 @@ import fes.jonathan.holamundocrudv1.services.ProductoService;
 public class DetallesActivity extends AppCompatActivity {
 
     private ProductoModel productoDetalle;
+    ProductoService productoService = new ProductoService(this);
     private int productoId;
     private TextView nombre;
     private TextView descripcion;
@@ -33,7 +34,7 @@ public class DetallesActivity extends AppCompatActivity {
         });
         Bundle bundle = getIntent().getExtras();
         productoId= bundle.getInt("ProductoId");
-        productoDetalle = ProductoService.getInstance().obtenerPorId(productoId);
+        productoDetalle = productoService.obtenerPorId(productoId);
         nombre = findViewById(R.id.textViewNombre);
         descripcion= findViewById(R.id.textViewDescripcion);
         nombre.setText(productoDetalle.getNombre());

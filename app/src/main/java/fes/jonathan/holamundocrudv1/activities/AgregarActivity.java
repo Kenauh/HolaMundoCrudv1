@@ -14,13 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 import fes.jonathan.holamundocrudv1.R;
 import fes.jonathan.holamundocrudv1.models.ProductoModel;
 import fes.jonathan.holamundocrudv1.services.ProductoService;
-
 public class AgregarActivity extends AppCompatActivity {
 
     EditText editTextNombre;
     EditText editTextDescripcion;
 
-    ProductoService productoService = ProductoService.getInstance();
+    ProductoService productoService = new ProductoService(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

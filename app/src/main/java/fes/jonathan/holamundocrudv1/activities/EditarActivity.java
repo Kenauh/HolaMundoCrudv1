@@ -13,9 +13,8 @@ import androidx.core.view.WindowInsetsCompat;
 import fes.jonathan.holamundocrudv1.R;
 import fes.jonathan.holamundocrudv1.models.ProductoModel;
 import fes.jonathan.holamundocrudv1.services.ProductoService;
-
 public class EditarActivity extends AppCompatActivity {
-    ProductoService productoService = ProductoService.getInstance();
+    ProductoService productoService = new ProductoService(this);
     private EditText editTextNombreEditar;
     private EditText editTextDescripcionEditar;
     private int productoId;
@@ -45,7 +44,7 @@ public class EditarActivity extends AppCompatActivity {
 //      productoAEditar.setNombre(nombre);
 //      productoAEditar.setDescripcion(descripcion);
         ProductoModel editado = new ProductoModel(productoId,nombre,descripcion);
-        ProductoService.getInstance().editar(editado);
+        productoService.editar(editado);
         finish();
     }
 }

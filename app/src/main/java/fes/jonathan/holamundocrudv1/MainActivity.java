@@ -22,10 +22,9 @@ import fes.jonathan.holamundocrudv1.activities.DetallesActivity;
 import fes.jonathan.holamundocrudv1.activities.EditarActivity;
 import fes.jonathan.holamundocrudv1.models.ProductoModel;
 import fes.jonathan.holamundocrudv1.services.ProductoService;
-
 public class MainActivity extends AppCompatActivity {
     Spinner spinner;
-    ProductoService service;
+    ProductoService service = new ProductoService(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +36,19 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+//        mostrarDialog();
         spinner = findViewById(R.id.spinner);
-        service = ProductoService.getInstance();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        actualizarSpinner();
-    }
-
-    private void actualizarSpinner() {
         List<ProductoModel> productoModels = service.obtenerTodos();
         llenarSpinner(productoModels);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();    // Esto se ejecutará cada vez que regreses a esta pantalla
+        List<ProductoModel> productoModels = service.obtenerTodos();
+        llenarSpinner(productoModels);
+    }
     public void mostrarDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Este es un titulo")
@@ -85,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void confirmarBorrar(View view){
         ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
-        if (productoModel == null) return;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eliminar")
                 .setMessage("¿Quiéres borrar este elemento? "+productoModel.getNombre());
@@ -95,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 service.borrar(productoModel.getId());
                 Toast.makeText(getBaseContext(),"Producto borrado", Toast.LENGTH_SHORT).show();
-                actualizarSpinner();
+                List<ProductoModel> productoModels = service.obtenerTodos();
+                llenarSpinner(productoModels);
             }
         });
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -116,23 +112,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irAEditar(View view){
-        ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
-        if (productoModel == null) {
-            Toast.makeText(this, "Selecciona un producto", Toast.LENGTH_SHORT).show();
-            return;
-        }
         Intent intent = new Intent(this, EditarActivity.class);
+        ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
         intent.putExtra("ProductoId", productoModel.getId());
         startActivity(intent);
     }
 
     public void irADetalles(View view){
-        ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
-        if (productoModel == null) {
-            Toast.makeText(this, "Selecciona un producto", Toast.LENGTH_SHORT).show();
-            return;
-        }
         Intent intent = new Intent(this, DetallesActivity.class);
+        ProductoModel productoModel = (ProductoModel) spinner.getSelectedItem();
         intent.putExtra("ProductoId", productoModel.getId());
         startActivity(intent);
     }
